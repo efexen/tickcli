@@ -1,13 +1,14 @@
 package main
 
-import ("fmt"
-        "os"
-        "net/http"
-        "log"
-        "io/ioutil"
-        "encoding/xml"
-        "strconv"
-        "time"
+import (
+  "fmt"
+  "os"
+  "net/http"
+  "log"
+  "io/ioutil"
+  "encoding/xml"
+  "strconv"
+  "time"
 )
 
 type TickLog struct {
@@ -39,7 +40,7 @@ func executeCommand(command string, args []string) {
   default:
     help()
   case "log":
-    log_cmd()
+    logCmd()
   }
 }
 
@@ -49,17 +50,17 @@ func help() {
   fmt.Println("help    This message")
 }
 
-func log_cmd() {
+func logCmd() {
   // Todo here: accept the number of days to display with default of 10
-  start_date := time.Now().Add((time.Duration(-24)*time.Hour) * 10).Format("2006-01-02") //This is 10 days ago
+  startDate := time.Now().Add((time.Duration(-24)*time.Hour) * 10).Format("2006-01-02") //This is 10 days ago
   // Todo: Move these to a configuration file instead
   company := ""
   email := ""
   pass := ""
 
-  request_url := "https://" + company + ".tickspot.com/api/entries.json?email=" + email + "&password=" + pass + "&updated_at=" + start_date
+  requestUrl := "https://" + company + ".tickspot.com/api/entries.json?email=" + email + "&password=" + pass + "&updated_at=" + startDate
 
-  response := getResponse(request_url)
+  response := getResponse(requestUrl)
 
   var tickLog TickLog
   err := xml.Unmarshal(response, &tickLog)
