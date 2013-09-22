@@ -12,7 +12,7 @@ using command line including:
 - Mapping clients/projects/tasks to easy to remember keys
 - Adding new time entries
 
-Tickcli is currently very much work in progress, it is being written as
+**Tickcli is currently very much work in progress**, it is being written as
 a simple tool for myself and my colleagues for logging time from
 command line as well as for learning the Go programming language.
 
