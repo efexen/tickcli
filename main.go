@@ -9,6 +9,7 @@ import (
   "encoding/xml"
   "strconv"
   "time"
+  "github.com/howeyc/gopass"
 )
 
 type TickLog struct {
@@ -34,13 +35,15 @@ func main() {
 }
 
 func executeCommand(command string, args []string) {
-  fmt.Println("Processing command: " + command)
+  // fmt.Println("Processing command: " + command)
 
   switch command {
-  default:
-    help()
+  case "login":
+    loginCmd()
   case "log":
     logCmd()
+  default:
+    help()
   }
 }
 
@@ -48,6 +51,32 @@ func help() {
   fmt.Println("Help & Usage for tickcli")
   fmt.Println("")
   fmt.Println("help    This message")
+}
+
+func loginCmd() {
+  var company, email, password string
+
+  fmt.Print("Company: ")
+  fmt.Scan(&company)
+
+  fmt.Print("Email: ")
+  fmt.Scan(&email)
+
+  fmt.Print("Password: ")
+  bytes := gopass.GetPasswd()
+  password = string(bytes[:])
+
+  resp, _ := http.Get("https://" + company + ".tickspot.com/api/clients?email=" + email + "&password=" + password)
+
+  if resp.StatusCode != http.StatusOK {
+    fmt.Println("Error logging in... maybe you messed up the password?")
+    os.Exit(1);
+  }
+
+  config := Config{company, email, password}
+  config.WriteToFile();
+
+  fmt.Println("\nSuccess! saved your credentials to " + config.FilePath())
 }
 
 func logCmd() {
