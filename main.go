@@ -35,8 +35,6 @@ func main() {
 }
 
 func executeCommand(command string, args []string) {
-  // fmt.Println("Processing command: " + command)
-
   switch command {
   case "login":
     loginCmd()
@@ -48,9 +46,9 @@ func executeCommand(command string, args []string) {
 }
 
 func help() {
-  fmt.Println("Help & Usage for tickcli")
-  fmt.Println("")
+  fmt.Println("Help & Usage for tickcli\n")
   fmt.Println("help    This message")
+  fmt.Println("login   Login dawg")
 }
 
 func loginCmd() {
@@ -80,14 +78,13 @@ func loginCmd() {
 }
 
 func logCmd() {
+  config := Config{}
+  config.ReadFromFile()
+
   // Todo here: accept the number of days to display with default of 10
   startDate := time.Now().Add((time.Duration(-24)*time.Hour) * 10).Format("2006-01-02") //This is 10 days ago
-  // Todo: Move these to a configuration file instead
-  company := ""
-  email := ""
-  pass := ""
 
-  requestUrl := "https://" + company + ".tickspot.com/api/entries.json?email=" + email + "&password=" + pass + "&updated_at=" + startDate
+  requestUrl := "https://" + config.Company + ".tickspot.com/api/entries.json?email=" + config.Email + "&password=" + config.Password + "&updated_at=" + startDate
 
   response := getResponse(requestUrl)
 

@@ -3,6 +3,7 @@ package main
 import (
   "os"
   "os/user"
+  "io/ioutil"
   "encoding/json"
   "path/filepath"
 )
@@ -26,6 +27,11 @@ func (config *Config) WriteToFile() error {
   file.Close()
 
   return nil
+}
+
+func (config *Config) ReadFromFile() {
+  bytes, _ := ioutil.ReadFile(config.FilePath())
+  json.Unmarshal(bytes, &config)
 }
 
 func (config *Config) FilePath() (path string) {
